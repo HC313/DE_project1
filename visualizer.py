@@ -9,7 +9,7 @@ def get_severity(text):
     
     # 심각도 가중치 점수제
     keywords = {
-        'Severe': ['hospital', 'er', 'emergency', 'unbearable', 'agony', 'debilitating', 'excruciating', 'brutal', 'violent', 'crying'],
+        'Severe': ['emergency', 'unbearable', 'agony', 'debilitating', 'excruciating', 'brutal', 'violent', 'crying'],
         'Moderate': ['severe', 'terrible', 'worst', 'extreme', 'horrible', 'awful', 'intense', 'painful', 'uncomfortable', 'rough', 'struggling', 'hard', 'tough', 'exhausting', 'sucks', 'frustrating', 'sick', 'constant', 'frequent'],
         'Mild': ['mild', 'little', 'bearable', 'slight', 'manageable', 'annoying', 'fine', 'okay', 'minor', 'fleeting', 'temporary', 'occasional', 'barely', 'subtle', 'tolerable', 'light']
     }
@@ -19,7 +19,6 @@ def get_severity(text):
 
 def get_dashboard_graphs(df, drug_name, color_scale):
     drug_df = df[df['drug_type'].str.contains(drug_name, case=False, na=False)].copy()
-    drug_df = drug_df[drug_df['year_month'] >= '2023-01']
 
     # 1. 빈도수 (Top 10)
     all_effects = [e.strip() for row in drug_df['side_effects'].dropna().astype(str) for e in row.split(',') if e.strip()]
@@ -36,7 +35,7 @@ def get_dashboard_graphs(df, drug_name, color_scale):
     trend = exploded[exploded['split'].isin(top_5)].groupby(['year_month', 'split']).size().reset_index(name='count')
     fig_line = px.line(trend, x='year_month', y='count', color='split', markers=True)
     fig_line.update_xaxes(
-        type='category',  # 'date' 대신 'category'를 사용하여 데이터에 적힌 값 그대로 표시
+        type='category', 
         tickformat='%Y-%m',
         categoryorder='category ascending' # 시간순으로 정렬
     )
