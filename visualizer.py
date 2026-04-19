@@ -25,7 +25,8 @@ def get_dashboard_graphs(df, drug_name, color_scale):
     top_10 = [item[0] for item in Counter(all_effects).most_common(10)]
     df_counts = pd.DataFrame(Counter(all_effects).most_common(10), columns=['Side_Effect', 'Frequency'])
     fig_bar = px.bar(df_counts, x='Side_Effect', y='Frequency', color='Frequency', color_continuous_scale=color_scale)
-
+    fig_bar.update_layout(coloraxis_cmin=5, coloraxis_cmax=max(df_counts['Frequency']))
+    
     # 2. 월별 추이 (Top 5)
     top_5 = top_10[:5]
     drug_df['split'] = drug_df['side_effects'].str.split(',')
