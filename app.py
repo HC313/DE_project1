@@ -4,8 +4,6 @@ import plotly.express as px
 from visualizer import get_dashboard_graphs
 from data_loader import load_and_clean_data
 from collections import Counter
-# 비교 함수를 여기서 직접 정의하거나 visualizer에서 가져오세요
-# 여기서는 코드 통합을 위해 직관적으로 작성했습니다.
 
 st.set_page_config(layout="wide", page_title="비만치료제 통합 분석 대시보드")
 st.title("💊 비만치료제 부작용 통합 대시보드")
@@ -25,7 +23,6 @@ for i, (name, key) in enumerate(drugs.items()):
             st.plotly_chart(l, use_container_width=True)
             st.plotly_chart(s, use_container_width=True)
 
-# 2. 하단에 신규 FDA 비교 그래프 2개 추가 (총 8개 완성)
 f_col1, f_col2 = st.columns(2)
 
 def get_reddit_counts(df, drug_type):
@@ -51,7 +48,6 @@ def plot_comparison(drug_name, drug_key, fda_data, color_map):
     fig.update_layout(yaxis={'categoryorder':'total ascending'}) # 빈도순 정렬
     return fig
 
-# 아래 plot_comparison 함수는 이전 단계에서 작성한 코드를 그대로 사용하시면 됩니다.
 with f_col1:
     wegovy_fda = {
         'nausea': 44.0, 'diarrhea': 30.0, 'vomiting': 24.0, 'constipation': 24.0, 'stomach_pain': 20.0,
