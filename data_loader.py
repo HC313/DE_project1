@@ -25,15 +25,22 @@ def load_and_clean_data():
         # 몽고DB의 _id 컬럼 제거
         if '_id' in df.columns:
             df = df.drop(columns=['_id'])
-            df.columns = df.columns.str.strip().str.lower()
-       
-    # 1. timestamp를 datetime 객체로 변환
-    df['date'] = pd.to_datetime(df['timestamp'], unit='s', errors='coerce')
+            
+        # 데이터 정제 (기존 로직 유지)
+        df.columns = df.columns.str.strip().str.lower()
+        df['timestamp'] = pd.to_numeric(df['timestamp'], errors='coerce')
         
-    # 2. 모든 데이터의 year_month를 'YYYY-MM'으로 통일
-    df['year_month'] = df['date'].dt.strftime('%Y-%m')
+        # 날짜 변환
+        try:
+            df['date'] = pd.to_datetime(df['timestamp'], unit='s', errors='coerce')
+            df['year_month'] = df['date'].dt.strftime('%Y-%m')
+        except:
+            df['year_month'] = "Unknown"
+            
+        df['year_month'] = df['year_month'].fillna("Unknown")
         
-    # 3. 변환 실패한 데이터 처리
-    df['year_month'] = df['year_month'].fillna("Unknown")
+        return df
         
-    return df
+    except Exception as e:
+        st.error(f"데이터베이스 연결 실패: {e}")
+        return pd.DataFrame() # 빈 데이터프레임 반환
