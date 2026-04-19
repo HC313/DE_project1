@@ -34,8 +34,13 @@ def get_dashboard_graphs(df, drug_name, color_scale):
     exploded['split'] = exploded['split'].str.strip()
     trend = exploded[exploded['split'].isin(top_5)].groupby(['year_month', 'split']).size().reset_index(name='count')
     fig_line = px.line(trend, x='year_month', y='count', color='split', markers=True)
+    fig_line.update_xaxes(
+        type='category',  # 'date' 대신 'category'를 사용하여 데이터에 적힌 값 그대로 표시
+        tickformat='%Y-%m',
+        categoryorder='category ascending' # 시간순으로 정렬
+    )
+    
     fig_line.update_traces(line=dict(width=2), marker=dict(size=2))
-
     # 3. 심각도 (Top 10 부작용, content 기준)
     results = []
     for _, row in drug_df.iterrows():
