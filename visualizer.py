@@ -19,7 +19,6 @@ def get_severity(text):
 
 def get_dashboard_graphs(df, drug_name, color_scale):
     drug_df = df[df['drug_type'].str.contains(drug_name, case=False, na=False)].copy()
-    drug_df = drug_df[drug_df['year_month'] >= '2023-01']
 
     # 1. 빈도수 (Top 10)
     all_effects = [e.strip() for row in drug_df['side_effects'].dropna().astype(str) for e in row.split(',') if e.strip()]
