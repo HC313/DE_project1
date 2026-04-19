@@ -25,15 +25,15 @@ def load_and_clean_data():
         # 몽고DB의 _id 컬럼 제거
         if '_id' in df.columns:
             df = df.drop(columns=['_id'])
-        df.columns = df.columns.str.strip().str.lower()
+            df.columns = df.columns.str.strip().str.lower()
        
-        # 1. timestamp를 datetime 객체로 변환
-        df['date'] = pd.to_datetime(df['timestamp'], unit='s', errors='coerce')
+    # 1. timestamp를 datetime 객체로 변환
+    df['date'] = pd.to_datetime(df['timestamp'], unit='s', errors='coerce')
         
-        # 2. 모든 데이터의 year_month를 'YYYY-MM'으로 통일
-        df['year_month'] = df['date'].dt.strftime('%Y-%m')
+    # 2. 모든 데이터의 year_month를 'YYYY-MM'으로 통일
+    df['year_month'] = df['date'].dt.strftime('%Y-%m')
         
-        # 3. 변환 실패한 데이터 처리
-        df['year_month'] = df['year_month'].fillna("Unknown")
+    # 3. 변환 실패한 데이터 처리
+    df['year_month'] = df['year_month'].fillna("Unknown")
         
-        return df
+    return df
