@@ -4,8 +4,6 @@ import plotly.express as px
 from visualizer import get_dashboard_graphs
 from data_loader import load_and_clean_data
 from collections import Counter
-# 비교 함수를 여기서 직접 정의하거나 visualizer에서 가져오세요
-# 여기서는 코드 통합을 위해 직관적으로 작성했습니다.
 
 st.set_page_config(layout="wide", page_title="비만치료제 통합 분석 대시보드")
 st.title("💊 비만치료제 부작용 통합 대시보드")
