@@ -1,33 +1,27 @@
 import pandas as pd
 import streamlit as st
-import pymongo
+import json
 
-# 몽고DB 연결 정보
-MONGO_URI = "mongodb+srv://DEproject1:sksmsskawo123!@nje-cluster.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
+# 파일 경로 설정 (동일한 디렉토리에 있다고 가정)
+DATA_FILE = "Reddit_v7_v2_FINAL_FULL.jsonl"
 
-@st.cache_data(ttl=600) # 10분마다 캐시 갱신
+@st.cache_data(ttl=600)
 def load_and_clean_data():
     try:
-        client = pymongo.MongoClient(MONGO_URI)
-        db = client["DEproject"] # DB 이름 확인 필요
+        # 1. JSONL 파일 로드
+        # lines=True 옵션은 각 줄이 개별 JSON 객체인 파일을 읽을 때 사용합니다.
+        # 데이터가 크므로 필요한 컬럼만 추리거나 chunk 단위 처리가 가능하지만, 
+        # 우선 가장 기본적인 전체 읽기 방식을 적용합니다.
+        df = pd.read_json(DATA_FILE, lines=True)
         
-        # 1. Reddit 컬렉션 로드
-        reddit_data = list(db["Reddit_Cleaned_v3"].find())
-        df_reddit = pd.DataFrame(reddit_data)
-        
-        # 2. X(트위터) 컬렉션 로드 
-        x_data = list(db["X_Cleaned_v3"].find())
-        df_x = pd.DataFrame(x_data)
-        
-        # 데이터 합치기
-        df = pd.concat([df_reddit, df_x], ignore_index=True)
-        
-        # 몽고DB의 _id 컬럼 제거
+        # 2. 기존 데이터 정제 로직 유지
+        # 데이터베이스의 _id 필드가 있다면 제거
         if '_id' in df.columns:
             df = df.drop(columns=['_id'])
             
-        # 데이터 정제 (기존 로직 유지)
         df.columns = df.columns.str.strip().str.lower()
+        
+        # timestamp가 숫자형인지 확인하고 변환
         df['timestamp'] = pd.to_numeric(df['timestamp'], errors='coerce')
         
         # 날짜 변환
@@ -41,6 +35,9 @@ def load_and_clean_data():
         
         return df
         
+    except FileNotFoundError:
+        st.error(f"파일을 찾을 수 없습니다: {DATA_FILE}")
+        return pd.DataFrame()
     except Exception as e:
-        st.error(f"데이터베이스 연결 실패: {e}")
-        return pd.DataFrame() # 빈 데이터프레임 반환
+        st.error(f"데이터 로드 중 오류 발생: {e}")
+        return pd.DataFrame()
