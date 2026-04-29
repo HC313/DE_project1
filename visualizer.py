@@ -27,20 +27,19 @@ def get_dashboard_graphs(df, drug_name, color_scale):
     fig_bar = px.bar(df_counts, x='Side_Effect', y='Frequency', color='Frequency', color_continuous_scale=color_scale)
     fig_bar.update_layout(coloraxis_cmin=5, coloraxis_cmax=max(df_counts['Frequency']))
     
-    # 2. 월별 추이 (Top 5)
+    # 2. 월별 추이 (Top 5) - [수정 부분: 날짜 필터링 추가]
     top_5 = top_10[:5]
     drug_df['split'] = drug_df['side_effects'].str.split(',')
     exploded = drug_df.explode('split')
     exploded['split'] = exploded['split'].str.strip()
-    trend = exploded[exploded['split'].isin(top_5)].groupby(['year_month', 'split']).size().reset_index(name='count')
-    fig_line = px.line(trend, x='year_month', y='count', color='split', markers=True)
-    fig_line.update_xaxes(
-        type='category', 
-        tickformat='%Y-%m',
-        categoryorder='category ascending' # 시간순으로 정렬
-    )
     
+    # 데이터 기간 필터링 (2023-01 ~ 2025-11)
+    trend = exploded[exploded['split'].isin(top_5)].groupby(['year_month', 'split']).size().reset_index(name='count')
+    trend = trend[(trend['year_month'] >= '2022-06') & (trend['year_month'] <= '2025-11')]
+    
+    fig_line = px.line(trend, x='year_month', y='count', color='split', markers=True)
     fig_line.update_traces(line=dict(width=2), marker=dict(size=2))
+    
     # 3. 심각도 (Top 10 부작용, content 기준)
     results = []
     for _, row in drug_df.iterrows():
