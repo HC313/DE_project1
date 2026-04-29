@@ -26,7 +26,7 @@ def load_and_clean_data():
         if '_id' in df.columns:
             df = df.drop(columns=['_id'])
             
-        # 데이터 정제 (기존 로직 유지)
+        # 데이터 정제
         df.columns = df.columns.str.strip().str.lower()
         df['timestamp'] = pd.to_numeric(df['timestamp'], errors='coerce')
         
