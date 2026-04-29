@@ -51,7 +51,7 @@ def plot_comparison(drug_name, drug_key, fda_data, color_map):
 with f_col1:
     wegovy_fda = {
         'nausea': 44.0, 'diarrhea': 30.0, 'vomiting': 24.0, 'constipation': 24.0, 'stomach_pain': 20.0,
-        'headache': 14.0, 'fatigue': 11.0, 'acid_reflux': 9.0, 'dizziness': 8.0
+        'headache': 14.0
     }
     # plot_comparison 함수 호출 (위고비)
     st.plotly_chart(plot_comparison("Wegovy", "wegovy", wegovy_fda, {'Reddit+X': '#d62728', 'FDA': '#ff9f9a'}), use_container_width=True)
