@@ -54,4 +54,3 @@ def get_dashboard_graphs(df, drug_name, color_scale):
                      color_discrete_map={'Mild': '#74c476', 'Moderate': '#fd8d3c', 'Severe': '#e31a1c', 'Unspecified': '#cccccc'})
     
     return fig_bar, fig_line, fig_sev
-
