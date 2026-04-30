@@ -6,7 +6,7 @@ from data_loader import load_and_clean_data
 from collections import Counter
 
 st.set_page_config(layout="wide", page_title="Reddit Visualization Dashboard")
-st.title("Reddit Visualization Dashboard")
+st.title("US Data Visualization Dashboard")
 
 # 데이터 로드
 df = load_and_clean_data()
