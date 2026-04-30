@@ -29,7 +29,7 @@ def get_counts(df, drug_type):
 for i, (name, (key, color)) in enumerate(drugs.items()):
     target = col1 if i == 0 else col2
     with target:
-        st.subheader(f"{name} DC Data Visualization")
+        st.subheader(f"{name} 국내 데이터 시각화(DC)")
         fig_bar, fig_line, fig_sev = get_dashboard_graphs_dc(df, key, color)
         
         st.plotly_chart(fig_bar, use_container_width=True)
