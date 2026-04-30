@@ -21,7 +21,7 @@ def get_dashboard_graphs_dc(df, drug_type, color_scale):
     all_effects = [e.strip() for row in drug_df['side_effects'].dropna().astype(str) for e in row.split(',') if e.strip()]
     top_10 = Counter(all_effects).most_common(10)
     top_10_names = [item[0] for item in top_10]
-    fig_bar = px.bar(pd.DataFrame(top_10, columns=['부작용', '언급량']), x='부작용', y='언급량', color='언급량', color_continuous_scale=color_scale, title="상위 10개 부작용 빈도")
+    fig_bar = px.bar(pd.DataFrame(top_10, columns=['부작용', '언급량']), x='부작용', y='언급량', color='언급량', color_continuous_scale=color_scale)
 
     # 2. 상위 5개 부작용 시계열 추이
     top_5 = top_10_names[:5]
@@ -33,7 +33,7 @@ def get_dashboard_graphs_dc(df, drug_type, color_scale):
     trend = exploded[exploded['split'].isin(top_5)].groupby(['year_month', 'split']).size().reset_index(name='count')
     pivot = trend.pivot(index='year_month', columns='split', values='count').fillna(0).reindex(index=all_months, columns=top_5, fill_value=0)
     trend_filled = pivot.reset_index().melt(id_vars='year_month', var_name='split', value_name='count')
-    fig_line = px.line(trend_filled, x='year_month', y='count', color='split', markers=True, title="상위 5개 부작용 추이")
+    fig_line = px.line(trend_filled, x='year_month', y='count', color='split', markers=True)
     fig_line.update_xaxes(range=[all_months[0], all_months[-1]], type='category')
 
     # 3. 상위 10개 부작용 심각도 (original_full_text 사용!)
@@ -47,6 +47,6 @@ def get_dashboard_graphs_dc(df, drug_type, color_scale):
     
     df_sev = pd.DataFrame(sev_data)
     pivot_sev = pd.crosstab(df_sev['부작용'], df_sev['심각도']).reindex(index=top_10_names, columns=['Mild', 'Moderate', 'Severe', 'Unspecified'], fill_value=0)
-    fig_sev = px.bar(pivot_sev, barmode='stack', orientation='h', title="상위 10개 부작용 심각도 분포")
+    fig_sev = px.bar(pivot_sev, barmode='stack', orientation='h')
     
     return fig_bar, fig_line, fig_sev
