@@ -6,7 +6,7 @@ import pandas as pd
 import plotly.express as px
 
 st.set_page_config(layout="wide")
-st.title("DC Visualization Dashboard")
+st.title("KR Data Visualization Dashboard")
 
 df = load_dc_data()
 
