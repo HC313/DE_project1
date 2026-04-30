@@ -1,6 +1,7 @@
 import pandas as pd
-import streamlit as st
+from collections import Counter
 import pymongo
+import streamlit as st
 
 # 몽고DB 연결 정보
 MONGO_URI = "mongodb+srv://DEproject1:sksmsskawo123!@nje-cluster.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
@@ -13,14 +14,7 @@ def load_and_clean_data():
         
         # 1. Reddit 컬렉션 로드
         reddit_data = list(db["Reddit_Cleaned_v3"].find())
-        df_reddit = pd.DataFrame(reddit_data)
-        
-        # 2. X(트위터) 컬렉션 로드 
-        x_data = list(db["X_Cleaned_v3"].find())
-        df_x = pd.DataFrame(x_data)
-        
-        # 데이터 합치기
-        df = pd.concat([df_reddit, df_x], ignore_index=True)
+        df = pd.DataFrame(reddit_data)
         
         # 몽고DB의 _id 컬럼 제거
         if '_id' in df.columns:
