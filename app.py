@@ -20,7 +20,7 @@ col1, col2 = st.columns(2)
 drugs = {'🔴 Wegovy': 'wegovy', '🔵 Mounjaro': 'mounjaro'}
 for i, (name, key) in enumerate(drugs.items()):
     with [col1, col2][i]:
-        st.subheader(f"{name} Reddit Data Visualization")
+        st.subheader(f"{name} 해외 데이터 시각화(Reddit)")
         # visualizer.py의 함수를 호출하여 그래프 생성
         b, l, s = get_dashboard_graphs(df, key, 'Reds' if key=='wegovy' else 'Blues')
         
